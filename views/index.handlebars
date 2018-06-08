@@ -1,0 +1,48 @@
+<h1> Eat-Da-Burger</h1>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <ul>
+                {{#each burgers}}
+                    {{#unless this.devoured}}
+                        <div id="newBurger">
+                            {{this.burger_name}}
+                        </div>
+                        <div id="devBtn">
+                            {{!-- 
+                            form action = the route to where the backend code is written 
+                            method = get or post 
+                                generally use post which send data securely 
+                            --}}
+                            <form action="/burgers/" method="POST">
+                                <button class="eat" data-id="{{this.id}}" type="submit"> Devour! </button>
+                            </form> 
+                        </div>
+                    {{/unless}}
+                {{/each}}
+            </ul>
+        </div>
+
+        <div class="col-md-6">
+            <ul>
+                {{#each burgers}}
+                    {{#if devoured}}
+                        <div id="eatenBurger">
+                            {{this.burger_name}}
+                        </div>
+                    {{/if}}
+                {{/each}}
+            </ul>
+        </div>
+
+    </div>
+</div>
+
+<h2>Create a Burger</h2>
+<form action="/burgers" method="POST">
+    {{!-- name attribute = reference form data --}}
+    <textarea type="text" id="burgerName" name="burger_name"></textarea>
+    <button type="submit">Add Burger</button>
+</form>
+
