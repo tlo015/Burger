@@ -9,15 +9,21 @@
                         <div id="newBurger">
                             {{this.burger_name}}
                         </div>
-                        <div id="devBtn">
+                        <div>
                             {{!-- 
                             form action = the route to where the backend code is written 
                             method = get or post 
                                 generally use post which send data securely 
                             --}}
-                            <form action="/burgers/" method="POST">
+                            {{!-- <form action="/burgers/{{this.id}}?_method=PUT" method="POST">
                                 <button class="eat" data-id="{{this.id}}" type="submit"> Devour! </button>
-                            </form> 
+                            </form>  --}}
+                            <button class="eat" data-id="{{id}}" data-devour="{{false}}">
+                                Devour
+                            </button>
+
+             {{!-- <button type="submit">Devour</button> --}}
+           </form>
                         </div>
                     {{/unless}}
                 {{/each}}
@@ -40,9 +46,66 @@
 </div>
 
 <h2>Create a Burger</h2>
-<form action="/burgers" method="POST">
+{{!-- <form action="/burgers" method="POST"> --}}
     {{!-- name attribute = reference form data --}}
-    <textarea type="text" id="burgerName" name="burger_name"></textarea>
-    <button type="submit">Add Burger</button>
+    {{!-- <textarea type="text" id="burgerName" name="burger_name"></textarea> --}}
+    {{!-- <button type="submit">Add Burger</button>  --}}
+    {{!-- </form> --}}
+
+<form class="create-form">
+
+  <div class="form-group">
+    <label for="burName">Burger Name:</label>
+    <input type="text" id="burName" name="name">
+  </div>
+
+  <button type="submit">Add Burger</button>
 </form>
+
+
+<script type="text/javascript">
+$(function() {
+  $(".eat").on("click", function(event) {
+    var id = $(this).data("id");
+    var newState = $(this).data("newstate");
+
+    var newBurState = {
+      devoured: newState
+    };
+
+    // Send the PUT request.
+    $.ajax("/api/burgers/" + id, {
+      type: "PUT",
+      data: newBurState
+    }).then(
+      function() {
+        console.log("changed burger to", newState);
+        // Reload the page to get the updated list
+        location.reload();
+      }
+    );
+  });
+
+  $(".create-form").on("submit", function(event) {
+    // Make sure to preventDefault on a submit event.
+    event.preventDefault();
+
+    var newBurger = {
+      burger_name: $("#burName").val().trim(),
+    };
+
+    // Send the POST request.
+    $.ajax("/api/burgers", {
+      type: "POST",
+      data: newBurger
+    }).then(
+      function() {
+        console.log("created new burger");
+        // Reload the page to get the updated list
+        location.reload();
+      }
+    );
+  });
+});
+</script>
 
