@@ -1,3 +1,7 @@
-h1{
+html {
+    background-color: orange;
+}
+
+#masthead {
     text-align: center;
 }
